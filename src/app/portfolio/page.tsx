@@ -245,8 +245,20 @@ export default function PortfolioPage() {
     <main className="bg-black min-h-screen relative">
       <Starfield />
 
-      {/* Nav */}
-      <div className="fixed top-6 left-0 right-0 z-50 px-6 md:px-12 flex justify-center md:justify-end">
+      {/* Fixed Header: Logo and Navbar side-by-side */}
+      <div className="fixed top-6 left-0 right-0 z-50 px-4 md:px-12 flex items-center justify-between gap-4">
+        <Link href="/" className="block animate-fade-in">
+          <div className="cursor-pointer transition-transform duration-300 ease-out hover:scale-115 active:scale-95">
+            <Image
+              src="/logo.png"
+              alt="Logo Matheus Tattoo Arts"
+              width={160}
+              height={160}
+              className="w-28 h-28 md:w-40 md:h-40 object-contain"
+              priority
+            />
+          </div>
+        </Link>
         <NavHeader />
       </div>
 
