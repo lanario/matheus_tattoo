@@ -569,7 +569,7 @@ export default function FlickeringFooter({
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
 
           {/* Brand column */}
-          <div className="col-span-12 lg:col-span-4 flex flex-col space-y-5">
+          <div className="col-span-1 md:col-span-12 lg:col-span-4 flex flex-col space-y-5">
             <div className="flex items-center gap-2">
               <span
                 className="text-2xl font-bold tracking-wider text-white select-none transition-all duration-300 pirata-one-regular"
@@ -618,7 +618,7 @@ export default function FlickeringFooter({
           </div>
 
           {/* Link columns */}
-          <div className="col-span-12 md:col-span-8 lg:col-span-5 grid grid-cols-3 gap-6">
+          <div className="col-span-1 md:col-span-8 lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6">
             {navLinks.map((group) => (
               <div key={group.title} className="flex flex-col space-y-4">
                 <span className="text-xs uppercase tracking-widest text-zinc-300 font-semibold montserrat-regular">
@@ -629,6 +629,11 @@ export default function FlickeringFooter({
                     <li key={link.label}>
                       <Link
                         href={link.href}
+                        onClick={(e) => {
+                          if (link.href === "#" || link.href === "#!") {
+                            e.preventDefault();
+                          }
+                        }}
                         className="hover:text-white transition-colors duration-200 montserrat-regular text-zinc-500 hover:translate-x-1 inline-block transform transition-transform"
                       >
                         {link.label}
@@ -641,11 +646,11 @@ export default function FlickeringFooter({
           </div>
 
           {/* Newsletter / Contact Column */}
-          <div className="col-span-12 lg:col-span-3 flex flex-col space-y-5">
+          <div className="col-span-1 md:col-span-4 lg:col-span-3 flex flex-col space-y-5">
             <span className="text-xs uppercase tracking-widest text-zinc-300 font-semibold montserrat-regular">
               Receba Novidades
             </span>
-            <p className="text-sm text-zinc-500 montserrat-regular leading-relaxed">
+            <p className="text-sm text-zinc-500 montserrat-regular leading-relaxed max-w-sm">
               Fique por dentro da abertura da agenda e novos projetos do estúdio.
             </p>
             <form onSubmit={handleSubscribe} className="relative flex flex-col gap-2">

@@ -1,8 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 export function AboutSection() {
+  const [isColored, setIsColored] = useState(false);
+
   return (
-    <section id="sobre" className="pt-6 pb-20 px-6 md:px-12 max-w-7xl mx-auto w-full relative z-10">
+    <section id="sobre" className="-mt-16 mb-16 pt-6 pb-20 px-6 md:px-12 max-w-7xl mx-auto w-full relative z-10">
       <div className="bg-zinc-950/60 border border-zinc-800/40 rounded-3xl p-8 md:p-16 backdrop-blur-xl shadow-2xl relative overflow-hidden">
         {/* Decorative backdrop light glows */}
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/5 rounded-full blur-[120px] pointer-events-none" />
@@ -11,13 +16,20 @@ export function AboutSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Image of the professional */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="relative group w-full max-w-[360px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-zinc-800/50 bg-black">
+            <div
+              onClick={() => setIsColored(!isColored)}
+              className="relative group w-full max-w-[360px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-zinc-800/50 bg-black cursor-pointer"
+            >
               <Image
                 src="/matheus.png"
                 alt="Matheus - Tatuador Profissional"
                 fill
                 sizes="(max-width: 768px) 100vw, 360px"
-                className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out grayscale group-hover:grayscale-0"
+                className={`object-cover object-center transition-all duration-700 ease-out ${
+                  isColored
+                    ? "scale-105 grayscale-0"
+                    : "group-hover:scale-105 grayscale group-hover:grayscale-0"
+                }`}
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 pointer-events-none" />
@@ -55,7 +67,9 @@ export function AboutSection() {
 
             <div className="pt-4">
               <a
-                href="#orcamento"
+                href="https://wa.me/5521965313328"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white text-black font-semibold tracking-wide transition-all duration-300 hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] active:scale-95 montserrat-regular text-sm md:text-base"
               >
                 Agendar Consulta

@@ -94,45 +94,51 @@ const FloatingActionMenu = ({ options, className }: FloatingActionMenuProps) => 
   return (
     <div className={cn("fixed bottom-8 right-8 z-[100]", className)}>
       {/* Toggle button */}
-      <Button
-        onClick={toggleMenu}
-        className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 shadow-[0_0_30px_rgba(0,0,0,0.4)] backdrop-blur-md border border-white/10 text-white"
-      >
-        <motion.div
-          animate={{ rotate: isOpen ? 90 : 0 }}
-          transition={{
-            duration: 0.3,
-            ease: "easeInOut",
-            type: "spring",
-            stiffness: 300,
-            damping: 20,
-          }}
+      <div className="relative flex items-center justify-center">
+        {/* Pulsing background for attention */}
+        {!isOpen && (
+          <div className="absolute inset-0 rounded-full bg-white/20 animate-ping opacity-75" />
+        )}
+        <Button
+          onClick={toggleMenu}
+          className="w-14 h-14 relative z-10 rounded-full bg-white/10 hover:bg-white/20 shadow-[0_0_30px_rgba(0,0,0,0.4)] backdrop-blur-md border border-white/10 text-white"
         >
-          <AnimatePresence mode="wait" initial={false}>
-            {isOpen ? (
-              <motion.div
-                key="close"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                transition={{ duration: 0.15 }}
-              >
-                <XIcon className="w-5 h-5" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="open"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                transition={{ duration: 0.15 }}
-              >
-                <MessageCircleIcon className="w-5 h-5" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </Button>
+          <motion.div
+            animate={{ rotate: isOpen ? 90 : 0 }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+              type: "spring",
+              stiffness: 300,
+              damping: 20,
+            }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <XIcon className="w-6 h-6" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="open"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <MessageCircleIcon className="w-6 h-6" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </Button>
+      </div>
 
       {/* Menu items */}
       <AnimatePresence>
@@ -148,7 +154,7 @@ const FloatingActionMenu = ({ options, className }: FloatingActionMenuProps) => 
               damping: 20,
               delay: 0.1,
             }}
-            className="absolute bottom-14 right-0 mb-2"
+            className="absolute bottom-16 right-0 mb-2"
           >
             <div className="flex flex-col items-end gap-2">
               {options.map((option, index) => (

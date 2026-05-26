@@ -1,14 +1,14 @@
-//@ts-nocheck
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
 
 import { cn } from "@/lib/utils";
 
-const morphTime = 1.5;
-const cooldownTime = 0.5;
-
-const useMorphingText = (texts: string[]) => {
+const useMorphingText = (
+  texts: string[],
+  morphTime = 1.5,
+  cooldownTime = 0.5,
+) => {
   const textIndexRef = useRef(0);
   const morphRef = useRef(0);
   const cooldownRef = useRef(0);
@@ -51,7 +51,7 @@ const useMorphingText = (texts: string[]) => {
     if (fraction === 1) {
       textIndexRef.current++;
     }
-  }, [setStyles]);
+  }, [setStyles, morphTime, cooldownTime]);
 
   const doCooldown = useCallback(() => {
     morphRef.current = 0;
@@ -92,10 +92,16 @@ const useMorphingText = (texts: string[]) => {
 interface MorphingTextProps {
   className?: string;
   texts: string[];
+  morphTime?: number;
+  cooldownTime?: number;
 }
 
-const Texts: React.FC<Pick<MorphingTextProps, "texts">> = ({ texts }) => {
-  const { text1Ref, text2Ref } = useMorphingText(texts);
+const Texts: React.FC<Pick<MorphingTextProps, "texts" | "morphTime" | "cooldownTime">> = ({
+  texts,
+  morphTime,
+  cooldownTime,
+}) => {
+  const { text1Ref, text2Ref } = useMorphingText(texts, morphTime, cooldownTime);
   return (
     <>
       <span
@@ -127,14 +133,14 @@ const SvgFilters: React.FC = () => (
   </svg>
 );
 
-const MorphingText: React.FC<MorphingTextProps> = ({ texts, className }) => (
+const MorphingText: React.FC<MorphingTextProps> = ({ texts, className, morphTime, cooldownTime }) => (
   <div
     className={cn(
       "relative mx-auto h-12 w-full max-w-screen-md text-center font-sans text-2xl font-bold leading-none [filter:url(#threshold)_blur(0.6px)]",
       className,
     )}
   >
-    <Texts texts={texts} />
+    <Texts texts={texts} morphTime={morphTime} cooldownTime={cooldownTime} />
     <SvgFilters />
   </div>
 );

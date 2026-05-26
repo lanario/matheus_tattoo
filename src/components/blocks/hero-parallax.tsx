@@ -54,15 +54,29 @@ const HeroParallaxContent = ({
 
   const translateX = useSpring(useTransform(scrollYProgress, [0, 1], [0, isMobile ? 250 : 1000]), springConfig);
   const translateXReverse = useSpring(useTransform(scrollYProgress, [0, 1], [0, isMobile ? -250 : -1000]), springConfig);
-  const rotateX = useSpring(useTransform(scrollYProgress, [0, 0.2], [isMobile ? 5 : 15, 0]), springConfig);
-  const opacity = useSpring(useTransform(scrollYProgress, [0, 0.2], [0.2, 1]), springConfig);
-  const rotateZ = useSpring(useTransform(scrollYProgress, [0, 0.2], [isMobile ? 5 : 20, 0]), springConfig);
-  const translateY = useSpring(useTransform(scrollYProgress, [0, 0.2], [isMobile ? -150 : -700, isMobile ? 50 : 200]), springConfig);
+  const rotateX = useSpring(useTransform(scrollYProgress, [0, 0.4], [isMobile ? 5 : 15, 0]), springConfig);
+  const opacity = useSpring(useTransform(scrollYProgress, [0, 0.4], [0.2, 1]), springConfig);
+  const rotateZ = useSpring(useTransform(scrollYProgress, [0, 0.4], [isMobile ? 5 : 20, 0]), springConfig);
+  const translateY = useSpring(useTransform(scrollYProgress, [0, 0.4], [isMobile ? -150 : -700, isMobile ? 50 : 200]), springConfig);
+
+  const [activeCardTitle, setActiveCardTitle] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!isMobile) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest(".product-card-container")) {
+        setActiveCardTitle(null);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [isMobile]);
 
   return (
     <div
       ref={ref}
-      className="h-[200vh] py-20 md:py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d] bg-transparent text-white"
+      className="h-[130vh] md:h-[175vh] py-10 md:py-24 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d] bg-transparent text-white"
     >
       <Header />
       <motion.div
@@ -76,17 +90,39 @@ const HeroParallaxContent = ({
       >
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-8 md:space-x-20 mb-8 md:mb-20">
           {firstRow.map((product, idx) => (
-            <ProductCard product={product} translate={translateX} key={product.title} priority={idx < 3} />
+            <ProductCard
+              product={product}
+              translate={translateX}
+              key={product.title}
+              priority={idx < 3}
+              isMobile={isMobile}
+              isActive={activeCardTitle === product.title}
+              onClick={() => setActiveCardTitle(activeCardTitle === product.title ? null : product.title)}
+            />
           ))}
         </motion.div>
         <motion.div className="flex flex-row mb-8 md:mb-20 space-x-8 md:space-x-20">
           {secondRow.map((product) => (
-            <ProductCard product={product} translate={translateXReverse} key={product.title} />
+            <ProductCard
+              product={product}
+              translate={translateXReverse}
+              key={product.title}
+              isMobile={isMobile}
+              isActive={activeCardTitle === product.title}
+              onClick={() => setActiveCardTitle(activeCardTitle === product.title ? null : product.title)}
+            />
           ))}
         </motion.div>
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-8 md:space-x-20">
           {thirdRow.map((product) => (
-            <ProductCard product={product} translate={translateX} key={product.title} />
+            <ProductCard
+              product={product}
+              translate={translateX}
+              key={product.title}
+              isMobile={isMobile}
+              isActive={activeCardTitle === product.title}
+              onClick={() => setActiveCardTitle(activeCardTitle === product.title ? null : product.title)}
+            />
           ))}
         </motion.div>
       </motion.div>
@@ -102,16 +138,18 @@ const SLOGANS = [
 
 export const Header = () => {
   return (
-    <div className="max-w-7xl relative mx-auto py-16 md:py-28 px-4 w-full left-0 top-0 text-center">
-      <h1 className="text-5xl md:text-8xl font-bold text-white tracking-tight leading-tight flex flex-col items-center justify-center -translate-x-8 md:-translate-x-28">
+    <div className="max-w-7xl relative mx-auto pt-44 pb-12 md:py-28 px-4 w-full left-0 top-0 text-center">
+      <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold text-white tracking-tight leading-tight flex flex-col items-center justify-center translate-x-0 md:-translate-x-28">
         <TextDisperse
-          className="pirata-one-regular block mb-4 cursor-default select-none justify-center gap-[0.05em] md:gap-[0.08em] text-5xl md:text-8xl w-full"
+          className="pirata-one-regular block mb-4 cursor-default select-none justify-center gap-[0.05em] md:gap-[0.08em] text-5xl sm:text-6xl md:text-9xl w-full"
         >
           Matheus Tattoo Arts
         </TextDisperse>
         <MorphingText
           texts={SLOGANS}
-          className="text-neutral-400 text-xl md:text-3xl lg:text-4xl satisfy-regular font-normal normal-case h-8 md:h-12 lg:h-16"
+          cooldownTime={5}
+          morphTime={1}
+          className="text-neutral-400 text-2xl sm:text-3xl md:text-5xl pirata-one-regular font-normal normal-case h-10 sm:h-14 md:h-20"
         />
       </h1>
     </div>
@@ -122,6 +160,9 @@ export const ProductCard = ({
   product,
   translate,
   priority = false,
+  isMobile,
+  isActive,
+  onClick,
 }: {
   product: {
     title: string;
@@ -130,19 +171,36 @@ export const ProductCard = ({
   };
   translate: MotionValue<number>;
   priority?: boolean;
+  isMobile: boolean;
+  isActive: boolean;
+  onClick: () => void;
 }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (isMobile) {
+      if (!isActive) {
+        e.preventDefault();
+        onClick();
+      } else {
+        if (product.link === "#") {
+          e.preventDefault();
+          onClick();
+        }
+      }
+    }
+  };
+
   return (
     <motion.div
       style={{
         x: translate,
       }}
-      whileHover={{
-        y: -20,
-      }}
+      animate={isMobile ? { y: isActive ? -20 : 0 } : { y: 0 }}
+      whileHover={!isMobile ? { y: -20 } : undefined}
+      transition={{ duration: 0.3 }}
       key={product.title}
-      className="group/product h-60 w-[18rem] md:h-96 md:w-[30rem] relative flex-shrink-0 rounded-2xl overflow-hidden border border-neutral-800"
+      className="product-card-container group/product h-60 w-[18rem] md:h-96 md:w-[30rem] relative flex-shrink-0 rounded-2xl overflow-hidden border border-neutral-800"
     >
-      <Link href={product.link} className="block group-hover/product:shadow-2xl h-full w-full">
+      <Link href={product.link} onClick={handleClick} className="block group-hover/product:shadow-2xl h-full w-full">
         <Image
           src={product.thumbnail}
           height="600"
@@ -153,8 +211,16 @@ export const ProductCard = ({
           priority={priority}
         />
       </Link>
-      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black/60 pointer-events-none transition-opacity duration-300"></div>
-      <h2 className="absolute bottom-6 left-6 opacity-0 group-hover/product:opacity-100 text-white font-bold text-lg md:text-xl transition-opacity duration-300">
+      <div
+        className={`absolute inset-0 h-full w-full bg-black/60 pointer-events-none transition-opacity duration-300 ${
+          isActive ? "opacity-80" : "opacity-0 group-hover/product:opacity-80"
+        }`}
+      ></div>
+      <h2
+        className={`pirata-one-regular absolute bottom-6 left-6 text-white font-normal text-xl md:text-2xl transition-opacity duration-300 pointer-events-none ${
+          isActive ? "opacity-100" : "opacity-0 group-hover/product:opacity-100"
+        }`}
+      >
         {product.title}
       </h2>
     </motion.div>

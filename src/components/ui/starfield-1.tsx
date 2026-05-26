@@ -48,7 +48,7 @@ const Starfield = ({
   const [state, setState] = useState({
     init: true,
     canvas: true,
-    start: true,
+    start: false,
     stop: false,
     destroy: false,
     reset: false,
@@ -94,8 +94,14 @@ const Starfield = ({
   const measureViewport = () => {
     const el = canvasRef.current?.parentElement;
     if (el) {
-      sd.current.w = el.clientWidth;
-      sd.current.h = el.clientHeight;
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      
+      // Avoid division by zero, NaN, or Infinity by ignoring 0 or negative dimensions
+      if (w <= 0 || h <= 0) return;
+
+      sd.current.w = w;
+      sd.current.h = h;
       sd.current.x = Math.round(sd.current.w / 2);
       sd.current.y = Math.round(sd.current.h / 2);
       sd.current.z = (sd.current.w + sd.current.h) / 2;
@@ -153,8 +159,8 @@ const Starfield = ({
       sd.current.z = (sd.current.w + sd.current.h) / 2;
       sd.current.star.colorRatio = 1 / sd.current.z;
 
-      const rw = sd.current.w / sd.current.cw;
-      const rh = sd.current.h / sd.current.ch;
+      const rw = (sd.current.cw > 0 && isFinite(sd.current.w / sd.current.cw)) ? sd.current.w / sd.current.cw : 1;
+      const rh = (sd.current.ch > 0 && isFinite(sd.current.h / sd.current.ch)) ? sd.current.h / sd.current.ch : 1;
 
       if (sd.current.ctx) {
         sd.current.ctx.canvas.width = sd.current.w;
@@ -166,10 +172,20 @@ const Starfield = ({
       } else {
         sd.current.star.arr = sd.current.star.arr.map((star, i) => {
           const newStar = [...star];
-          newStar[0] = oldStar.arr[i][0] * rw;
-          newStar[1] = oldStar.arr[i][1] * rh;
-          newStar[3] = sd.current.x + (newStar[0] / newStar[2]) * ratio;
-          newStar[4] = sd.current.y + (newStar[1] / newStar[2]) * ratio;
+          const oldX = oldStar.arr && oldStar.arr[i] ? oldStar.arr[i][0] : 0;
+          const oldY = oldStar.arr && oldStar.arr[i] ? oldStar.arr[i][1] : 0;
+          const oldZ = oldStar.arr && oldStar.arr[i] ? oldStar.arr[i][2] : 1;
+
+          newStar[0] = oldX * rw;
+          newStar[1] = oldY * rh;
+          newStar[2] = oldZ;
+          
+          const zVal = newStar[2] > 0 ? newStar[2] : 1;
+
+          newStar[3] = sd.current.x + (newStar[0] / zVal) * ratio;
+          newStar[4] = sd.current.y + (newStar[1] / zVal) * ratio;
+          newStar[5] = newStar[3];
+          newStar[6] = newStar[4];
           return newStar;
         });
       }
@@ -266,6 +282,10 @@ const Starfield = ({
   };
 
   const init = () => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
     measureViewport();
     setupCanvas();
     bigBang();
@@ -276,6 +296,7 @@ const Starfield = ({
   const stop = () => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
       setState(prev => ({ ...prev, running: false }));
     }
   };
