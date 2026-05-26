@@ -65,16 +65,7 @@ export function AboutSection() {
               </p>
             </div>
 
-            <div className="pt-4">
-              <a
-                href="https://wa.me/5521965313328"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white text-black font-semibold tracking-wide transition-all duration-300 hover:bg-zinc-200 hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] active:scale-95 montserrat-regular text-sm md:text-base"
-              >
-                Agendar Consulta
-              </a>
-            </div>
+            {/* Removed Agendar Consulta button */}
           </div>
         </div>
       </div>
