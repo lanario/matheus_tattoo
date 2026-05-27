@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { useLanguage } from "@/context/language-context";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -352,6 +353,7 @@ export default function FlickeringFooter({
   glowColor?: string;
   className?: string;
 }) {
+  const { language, getWhatsAppLink } = useLanguage();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -404,37 +406,37 @@ export default function FlickeringFooter({
     }
   };
 
-  const navLinks = [
+  const navLinks = useMemo(() => [
     {
-      title: "Galeria",
+      title: language === "pt" ? "Galeria" : language === "en" ? "Gallery" : "Galerie",
       links: [
-        { label: "Realismo Preto & Cinza", href: "#" },
-        { label: "Retratos Realistas", href: "#" },
-        { label: "Esculturas Clássicas", href: "#" },
-        { label: "Tatuagens Mitológicas", href: "#" },
-        { label: "Samurais & Guerreiros", href: "#" },
+        { label: language === "pt" ? "Realismo Preto & Cinza" : language === "en" ? "Black & Grey Realism" : "Black & Grey Realismus", href: "#" },
+        { label: language === "pt" ? "Retratos Realistas" : language === "en" ? "Realistic Portraits" : "Realistische Porträts", href: "#" },
+        { label: language === "pt" ? "Esculturas Clássicas" : language === "en" ? "Classic Sculptures" : "Klassische Skulpturen", href: "#" },
+        { label: language === "pt" ? "Tatuagens Mitológicas" : language === "en" ? "Mythological Tattoos" : "Mythologische Tattoos", href: "#" },
+        { label: language === "pt" ? "Samurais & Guerreiros" : language === "en" ? "Samurais & Warriors" : "Samurais & Krieger", href: "#" },
       ],
     },
     {
-      title: "Estúdio",
+      title: language === "pt" ? "Estúdio" : language === "en" ? "Studio" : "Studio",
       links: [
-        { label: "Sobre o Matheus", href: "#sobre" },
-        { label: "Nossa Equipe", href: "#" },
-        { label: "Processo Criativo", href: "#" },
-        { label: "Higiene & Segurança", href: "#" },
-        { label: "Perguntas Frequentes", href: "#" },
+        { label: language === "pt" ? "Sobre o Matheus" : language === "en" ? "About Matheus" : "Über Matheus", href: "#sobre" },
+        { label: language === "pt" ? "Nossa Equipe" : language === "en" ? "Our Team" : "Unser Team", href: "#" },
+        { label: language === "pt" ? "Processo Criativo" : language === "en" ? "Creative Process" : "Kreativer Prozess", href: "#" },
+        { label: language === "pt" ? "Higiene & Segurança" : language === "en" ? "Hygiene & Safety" : "Hygiene & Sicherheit", href: "#" },
+        { label: language === "pt" ? "Perguntas Frequentes" : language === "en" ? "FAQ" : "Häufige Fragen", href: "#" },
       ],
     },
     {
-      title: "Informações",
+      title: language === "pt" ? "Informações" : language === "en" ? "Information" : "Informationen",
       links: [
-        { label: "Primeira Sessão", href: "#" },
-        { label: "Cuidados Pós-Tattoo", href: "#" },
-        { label: "Política de Agendamento", href: "#" },
-        { label: "Termos de Uso", href: "#" },
+        { label: language === "pt" ? "Primeira Sessão" : language === "en" ? "First Session" : "Erste Sitzung", href: "#" },
+        { label: language === "pt" ? "Cuidados Pós-Tattoo" : language === "en" ? "Aftercare" : "Nachsorge", href: "#" },
+        { label: language === "pt" ? "Política de Agendamento" : language === "en" ? "Booking Policy" : "Buchungsbedingungen", href: "#" },
+        { label: language === "pt" ? "Termos de Uso" : language === "en" ? "Terms of Use" : "Nutzungsbedingungen", href: "#" },
       ],
     },
-  ];
+  ], [language]);
 
   const socialLinks = [
     {
@@ -459,7 +461,7 @@ export default function FlickeringFooter({
     },
     {
       label: "TikTok",
-      href: "#",
+      href: "https://www.tiktok.com/@matheustattooarts2",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.76a8.14 8.14 0 004.77 1.53V6.84a4.83 4.83 0 01-1-.15z"/>
@@ -468,7 +470,7 @@ export default function FlickeringFooter({
     },
     {
       label: "YouTube",
-      href: "#",
+      href: "https://www.youtube.com/@matheustattooarts",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/>
@@ -541,10 +543,10 @@ export default function FlickeringFooter({
                   : undefined
               }
             >
-              Pronto para sua próxima obra de arte?
+              {language === "pt" ? "Pronto para sua próxima obra de arte?" : language === "en" ? "Ready for your next work of art?" : "Bereit für Ihr nächstes Kunstwerk?"}
             </h3>
             <p className="text-zinc-400 text-base md:text-lg montserrat-regular font-light">
-              Cada tatuagem começa com uma conversa. Conte sua ideia e vamos transformá-la em realidade.
+              {language === "pt" ? "Cada tatuagem começa com uma conversa. Conte sua ideia e vamos transformá-la em realidade." : language === "en" ? "Every tattoo starts with a conversation. Tell us your idea and let's turn it into reality." : "Jedes Tattoo beginnt mit einem Gespräch. Erzählen Sie uns von Ihrer Idee und lassen Sie uns diese in die Realität umsetzen."}
             </p>
           </div>
           <motion.a
@@ -558,7 +560,7 @@ export default function FlickeringFooter({
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="opacity-70 group-hover:opacity-100 transition-opacity">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
-            Agendar Consulta
+            {language === "pt" ? "Agendar Consulta" : language === "en" ? "Book Consultation" : "Beratung Buchen"}
             <ChevronRightIcon className="size-4 group-hover:translate-x-1 transition-transform" />
           </motion.a>
         </div>
@@ -588,7 +590,7 @@ export default function FlickeringFooter({
               </span>
             </div>
             <p className="text-sm text-zinc-400 max-w-sm leading-relaxed montserrat-regular">
-              Esculpindo realidade em pele no Rio de Janeiro. Tatuagens fotorrealistas de alta complexidade em preto e cinza, onde cada detalhe conta uma história.
+              {language === "pt" ? "Esculpindo realidade em pele no Rio de Janeiro. Tatuagens fotorrealistas de alta complexidade em preto e cinza, onde cada detalhe conta uma história." : language === "en" ? "Sculpting reality on skin in Rio de Janeiro. High complexity photorealistic black and grey tattoos, where every detail tells a story." : "Wir formen Realität auf der Haut in Rio de Janeiro. Hochkomplexe fotorealistische Black & Grey Tattoos, bei denen jedes Detail eine Geschichte erzählt."}
             </p>
 
             {/* Social Links */}
@@ -613,7 +615,7 @@ export default function FlickeringFooter({
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
                 <circle cx="12" cy="10" r="3"/>
               </svg>
-              <span>Rio de Janeiro, RJ — Brasil</span>
+              <span>{language === "pt" ? "Rio de Janeiro, RJ — Brasil" : language === "en" ? "Rio de Janeiro, RJ — Brazil" : "Rio de Janeiro, RJ — Brasilien"}</span>
             </div>
           </div>
 
@@ -646,18 +648,18 @@ export default function FlickeringFooter({
           </div>
 
           {/* Newsletter / Contact Column */}
-          <div className="col-span-1 md:col-span-4 lg:col-span-3 flex flex-col space-y-5">
+          <div className="col-span-1 md:col-span-4 lg:col-span-3 flex flex-col space-y-5 w-full overflow-hidden">
             <span className="text-xs uppercase tracking-widest text-zinc-300 font-semibold montserrat-regular">
-              Receba Novidades
+              {language === "pt" ? "Receba Novidades" : language === "en" ? "Newsletter" : "Newsletter"}
             </span>
             <p className="text-sm text-zinc-500 montserrat-regular leading-relaxed max-w-sm">
-              Fique por dentro da abertura da agenda e novos projetos do estúdio.
+              {language === "pt" ? "Fique por dentro da abertura da agenda e novos projetos do estúdio." : language === "en" ? "Stay informed about booking openings and new studio projects." : "Bleiben Sie informiert über Buchungseröffnungen und neue Studioprojekte."}
             </p>
-            <form onSubmit={handleSubscribe} className="relative flex flex-col gap-2">
-              <div className="relative flex items-center">
+            <form onSubmit={handleSubscribe} className="relative flex flex-col gap-2 w-full max-w-[100%] overflow-hidden">
+              <div className="relative flex items-center w-full">
                 <input
                   type="email"
-                  placeholder="Seu e-mail..."
+                  placeholder={language === "pt" ? "Seu e-mail..." : language === "en" ? "Your email..." : "Ihre E-Mail..."}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={cn(
@@ -675,20 +677,24 @@ export default function FlickeringFooter({
                 </button>
               </div>
               {error && (
-                <span className="text-xs text-red-500 montserrat-regular">Por favor, insira um e-mail válido.</span>
+                <span className="text-xs text-red-500 montserrat-regular">
+                  {language === "pt" ? "Por favor, insira um e-mail válido." : language === "en" ? "Please enter a valid email." : "Bitte geben Sie eine gültige E-Mail ein."}
+                </span>
               )}
               {success && (
-                <span className="text-xs text-green-500 montserrat-regular">Inscrição realizada com sucesso!</span>
+                <span className="text-xs text-green-500 montserrat-regular">
+                  {language === "pt" ? "Inscrição realizada com sucesso!" : language === "en" ? "Subscribed successfully!" : "Erfolgreich abonniert!"}
+                </span>
               )}
             </form>
 
             {/* Contato direto */}
             <div className="flex flex-col gap-2 pt-3 border-t border-zinc-800/40">
               <span className="text-xs uppercase tracking-widest text-zinc-300 font-semibold montserrat-regular">
-                Contato Direto
+                {language === "pt" ? "Contato Direto" : language === "en" ? "Direct Contact" : "Direkter Kontakt"}
               </span>
               <a
-                href="https://wa.me/5521965313328"
+                href={getWhatsAppLink()}
                 className="flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors montserrat-regular"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -697,14 +703,14 @@ export default function FlickeringFooter({
                 +55 21 96531-3328
               </a>
               <a
-                href="mailto:contato@matheustattoo.com"
+                href="mailto:Matheus.tattooarts@gmail.com"
                 className="flex items-center gap-2 text-sm text-zinc-500 hover:text-white transition-colors montserrat-regular"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <rect width="20" height="16" x="2" y="4" rx="2"/>
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                 </svg>
-                contato@matheustattoo.com
+                Matheus.tattooarts@gmail.com
               </a>
             </div>
           </div>
@@ -732,13 +738,13 @@ export default function FlickeringFooter({
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-zinc-600 montserrat-regular">
         <div className="flex items-center gap-3">
           <span>
-            © {new Date().getFullYear()} Matheus Tattoo Arts. Todos os direitos reservados.
+            © {new Date().getFullYear()} Matheus Tattoo Arts. {language === "pt" ? "Todos os direitos reservados." : language === "en" ? "All rights reserved." : "Alle Rechte vorbehalten."}
           </span>
         </div>
 
         <div className="flex items-center gap-6">
-          <Link href="#" className="hover:text-zinc-400 transition-colors">Política de Privacidade</Link>
-          <Link href="#" className="hover:text-zinc-400 transition-colors">Termos de Uso</Link>
+          <Link href="#" className="hover:text-zinc-400 transition-colors">{language === "pt" ? "Política de Privacidade" : language === "en" ? "Privacy Policy" : "Datenschutz"}</Link>
+          <Link href="#" className="hover:text-zinc-400 transition-colors">{language === "pt" ? "Termos de Uso" : language === "en" ? "Terms of Use" : "Nutzungsbedingungen"}</Link>
         </div>
       </div>
     </footer>

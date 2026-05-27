@@ -130,13 +130,34 @@ const HeroParallaxContent = ({
   );
 };
 
-const SLOGANS = [
-  "Esculpindo Realidade em Pele",
-  "Dando Vida às Suas Histórias na Pele",
-  "Capturando a Essência em Tinta",
-];
+import { useLanguage, Language } from "@/context/language-context";
+
+const getLocalizedSlogans = (lang: Language) => {
+  if (lang === "en") {
+    return [
+      "Sculpting Reality on Skin",
+      "Bringing Your Stories to Life on Skin",
+      "Capturing Essence in Ink",
+    ];
+  }
+  if (lang === "de") {
+    return [
+      "Realität auf der Haut formen",
+      "Ihre Geschichten auf der Haut zum Leben erwecken",
+      "Die Essenz in Tinte einfangen",
+    ];
+  }
+  return [
+    "Esculpindo Realidade em Pele",
+    "Dando Vida às Suas Histórias na Pele",
+    "Capturando a Essência em Tinta",
+  ];
+};
 
 export const Header = () => {
+  const { language } = useLanguage();
+  const slogans = getLocalizedSlogans(language);
+
   return (
     <div className="max-w-7xl relative mx-auto pt-44 pb-12 md:py-28 px-4 w-full left-0 top-0 text-center">
       <h1 className="text-5xl sm:text-6xl md:text-9xl font-bold text-white tracking-tight leading-tight flex flex-col items-center justify-center translate-x-0 md:-translate-x-28">
@@ -146,7 +167,7 @@ export const Header = () => {
           Matheus Tattoo Arts
         </TextDisperse>
         <MorphingText
-          texts={SLOGANS}
+          texts={slogans}
           cooldownTime={5}
           morphTime={1}
           className="text-neutral-400 text-2xl sm:text-3xl md:text-5xl pirata-one-regular font-normal normal-case h-10 sm:h-14 md:h-20"

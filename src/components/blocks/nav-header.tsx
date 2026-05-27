@@ -5,18 +5,21 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useLanguage, Language } from "@/context/language-context";
+
 type NavItem = {
-  label: string;
+  label: (lang: Language) => string;
   href: string;
 };
 
 const navItems: NavItem[] = [
-  { label: "Início", href: "/" },
-  { label: "Portfólio", href: "/portfolio" },
-  { label: "Sobre", href: "/#sobre" },
+  { label: (lang) => lang === "pt" ? "Início" : lang === "en" ? "Home" : "Start", href: "/" },
+  { label: (lang) => lang === "pt" ? "Portfólio" : lang === "en" ? "Portfolio" : "Portfolio", href: "/portfolio" },
+  { label: (lang) => lang === "pt" ? "Sobre" : lang === "en" ? "About" : "Über", href: "/#sobre" },
 ];
 
 function NavHeader() {
+  const { language } = useLanguage();
   const pathname = usePathname();
   const [position, setPosition] = useState({
     left: 0,
@@ -55,13 +58,13 @@ function NavHeader() {
 
         return (
           <Tab
-            key={item.label}
+            key={item.href}
             setPosition={setPosition}
             href={item.href}
             isActive={isActive}
             isHovered={isHovered}
           >
-            {item.label}
+            {item.label(language)}
           </Tab>
         );
       })}

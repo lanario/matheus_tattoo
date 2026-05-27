@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 // Inline SVG icons to avoid extra dependency
 const MessageCircleIcon = ({ className }: { className?: string }) => (
@@ -195,10 +196,12 @@ const FloatingActionMenu = ({ options, className }: FloatingActionMenuProps) => 
 
 // Pre-configured component for Matheus Tattoo
 export default function ContactFAB() {
+  const { getWhatsAppLink } = useLanguage();
+  
   const options: FloatingActionOption[] = [
     {
       label: "WhatsApp",
-      href: "https://wa.me/5521965313328",
+      href: getWhatsAppLink(),
       Icon: <WhatsAppIcon className="w-4 h-4 text-green-400" />,
     },
     {
