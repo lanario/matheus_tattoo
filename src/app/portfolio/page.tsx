@@ -136,9 +136,7 @@ export default function PortfolioPage() {
           </div>
         </Link>
         <div className="flex items-center gap-2 md:gap-6 ml-auto">
-          <div className="hidden md:block">
-            <NavHeader />
-          </div>
+          <NavHeader />
           <LanguageSelector />
         </div>
       </div>
