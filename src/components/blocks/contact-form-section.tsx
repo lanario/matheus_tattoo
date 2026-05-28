@@ -46,7 +46,7 @@ function CustomSelect({
       <button
         type="button"
         onClick={() => setOpen((p) => !p)}
-        className={`flex items-center justify-between bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-4 py-3 text-sm montserrat-regular focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all duration-200 backdrop-blur-sm ${buttonClassName || "w-full"}`}
+        className={`flex items-center justify-between bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-sm montserrat-regular focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all duration-200 backdrop-blur-sm ${buttonClassName || "w-full"}`}
       >
         <span className={value ? "text-white" : "text-zinc-600"}>{displayed}</span>
         <svg
@@ -67,8 +67,8 @@ function CustomSelect({
 
       {/* Dropdown panel */}
       {open && (
-        <div className="absolute z-50 mt-2 w-full min-w-max bg-zinc-950/95 border border-zinc-800/60 rounded-2xl backdrop-blur-xl shadow-2xl overflow-hidden">
-          <div className="p-3 flex flex-wrap gap-2 max-h-64 overflow-y-auto custom-scrollbar">
+        <div className="absolute z-50 mt-2 left-0 right-0 bg-zinc-950/95 border border-zinc-800/60 rounded-2xl backdrop-blur-xl shadow-2xl overflow-hidden">
+          <div className="flex flex-col max-h-56 md:max-h-64 overflow-y-auto custom-scrollbar">
             {options.map((opt) => {
               const optValue = typeof opt === "string" ? opt : opt.value;
               const optLabel = typeof opt === "string" ? opt : opt.label;
@@ -77,13 +77,18 @@ function CustomSelect({
                 key={optValue}
                 type="button"
                 onClick={() => { onChange(optValue); setOpen(false); }}
-                className={`px-4 py-1.5 rounded-full text-xs montserrat-regular border transition-all duration-150 whitespace-nowrap flex items-center gap-2 ${
+                className={`w-full px-4 py-2.5 text-sm montserrat-regular text-left flex items-center gap-2 transition-all duration-150 border-b border-zinc-800/40 last:border-b-0 ${
                   value === optValue
-                    ? "bg-white text-black border-white"
-                    : "bg-zinc-900/80 text-zinc-300 border-zinc-700/60 hover:border-zinc-400 hover:text-white"
+                    ? "bg-white/10 text-white font-semibold"
+                    : "text-zinc-300 hover:bg-zinc-800/60 hover:text-white"
                 }`}
               >
-                {optLabel}
+                {value === optValue && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-white">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+                <span className={value === optValue ? "" : "pl-[20px]"}>{optLabel}</span>
               </button>
             )})}
           </div>
@@ -343,19 +348,21 @@ export function ContactFormSection() {
   };
 
   const inputClass =
-    "w-full bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-4 py-3 text-white placeholder-zinc-600 text-sm montserrat-regular focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all duration-200 backdrop-blur-sm";
-  const labelClass = "block text-xs uppercase tracking-widest text-zinc-400 font-semibold montserrat-regular mb-2";
+    "w-full bg-zinc-900/60 border border-zinc-800/60 rounded-xl px-3 md:px-4 py-2.5 md:py-3 text-white placeholder-zinc-600 text-sm montserrat-regular focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-all duration-200 backdrop-blur-sm";
+  const labelClass = "block text-xs uppercase tracking-widest text-zinc-400 font-semibold montserrat-regular mb-1.5";
   const errorClass = "text-xs text-red-400 montserrat-regular mt-1";
 
   return (
     <section
       id="contato"
-      className="relative z-10 py-20 px-6 md:px-12 max-w-7xl mx-auto w-full"
+      className="relative z-10 py-12 md:py-16 px-4 md:px-8 max-w-6xl mx-auto w-full"
     >
-      <div className="bg-zinc-950/60 border border-zinc-800/40 rounded-3xl p-8 md:p-16 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-        {/* Decorative glows */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-white/3 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-neutral-900/50 rounded-full blur-[100px] pointer-events-none" />
+      <div className="bg-zinc-950/60 border border-zinc-800/40 rounded-2xl md:rounded-3xl p-6 md:p-10 backdrop-blur-xl shadow-2xl relative">
+        {/* Decorative glows — isolated overflow so dropdowns are not clipped */}
+        <div className="absolute inset-0 rounded-2xl md:rounded-3xl overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -left-40 w-96 h-96 bg-white/3 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-neutral-900/50 rounded-full blur-[100px]" />
+        </div>
 
         {submitted ? (
           <motion.div
@@ -385,15 +392,15 @@ export function ContactFormSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mb-12"
+              className="mb-6 md:mb-8"
             >
-              <span className="text-zinc-500 font-bold uppercase tracking-widest text-xs md:text-sm montserrat-regular block mb-3">
+              <span className="text-zinc-500 font-bold uppercase tracking-widest text-xs montserrat-regular block mb-2">
                 {tr.section_label}
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight pirata-one-regular mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight pirata-one-regular mb-2 md:mb-3">
                 {tr.title}
               </h2>
-              <p className="text-zinc-400 montserrat-regular text-base leading-relaxed max-w-2xl">
+              <p className="text-zinc-400 montserrat-regular text-sm md:text-base leading-relaxed">
                 {tr.subtitle}
               </p>
             </motion.div>
@@ -404,7 +411,7 @@ export function ContactFormSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5"
               >
                 {/* Full Name */}
                 <div className="md:col-span-2">
@@ -519,7 +526,7 @@ export function ContactFormSection() {
                 <div className="md:col-span-2">
                   <label className={labelClass}>{tr.tattoo_description}</label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     placeholder={tr.tattoo_description_placeholder}
                     value={form.tattooDescription}
                     onChange={(e) => setForm({ ...form, tattooDescription: e.target.value })}
@@ -528,14 +535,14 @@ export function ContactFormSection() {
                 </div>
 
                 {/* Submit */}
-                <div className="md:col-span-2 pt-2">
+                <div className="md:col-span-2 pt-1 md:pt-2">
                   <motion.button
                     type="submit"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full md:w-auto group inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-white text-black font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] montserrat-regular text-sm"
+                    className="w-full md:w-auto group inline-flex items-center justify-center gap-2.5 px-8 md:px-10 py-3 md:py-3.5 rounded-full bg-white text-black font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] montserrat-regular text-sm"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="opacity-70 group-hover:opacity-100 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="opacity-70 group-hover:opacity-100 transition-opacity">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                     </svg>
                     {tr.submit}
