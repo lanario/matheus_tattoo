@@ -4,6 +4,7 @@ import { HeroParallax } from "@/components/blocks/hero-parallax";
 import NavHeader from "@/components/blocks/nav-header";
 import { Starfield } from "@/components/ui/starfield-1";
 import { AboutSection } from "@/components/blocks/about-section";
+import { ContactFormSection } from "@/components/blocks/contact-form-section";
 import FlickeringFooter from "@/components/ui/flickering-footer";
 import ContactFAB from "@/components/ui/floating-action-menu";
 import Image from "next/image";
@@ -41,6 +42,7 @@ export default function Home() {
       </div>
       <HeroParallax products={products} />
       <AboutSection />
+      <ContactFormSection />
       <FlickeringFooter glowColor="var(--primary)" />
       <ContactFAB />
     </main>
