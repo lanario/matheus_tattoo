@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { useLanguage } from "@/context/language-context";
 
+
 export function AboutSection() {
-  const [isColored, setIsColored] = useState(false);
+
   const { language } = useLanguage();
 
   return (
@@ -18,20 +18,13 @@ export function AboutSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Image of the professional */}
           <div className="lg:col-span-5 flex justify-center">
-            <div
-              onClick={() => setIsColored(!isColored)}
-              className="relative group w-full max-w-[360px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-zinc-800/50 bg-black cursor-pointer"
-            >
+            <div className="relative group w-full max-w-[360px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-zinc-800/50 bg-black">
               <Image
                 src="/matheus.png"
                 alt="Matheus - Tatuador Profissional"
                 fill
                 sizes="(max-width: 768px) 100vw, 360px"
-                className={`object-cover object-center transition-all duration-700 ease-out ${
-                  isColored
-                    ? "scale-105 grayscale-0"
-                    : "group-hover:scale-105 grayscale group-hover:grayscale-0"
-                }`}
+                className="object-cover object-center grayscale transition-transform duration-700 ease-out group-hover:scale-105"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 pointer-events-none" />

@@ -230,6 +230,7 @@ export const ProductCard = ({
           className="object-cover object-center absolute h-full w-full inset-0"
           alt={product.title}
           priority={priority}
+          loading={priority ? "eager" : "lazy"}
         />
       </Link>
       <div
